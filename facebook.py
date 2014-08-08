@@ -23,6 +23,7 @@ FACEBOOK_APP_SECRET = '3a9e8151d533e04e88df1a74d43ef97c'
 app = Flask(__name__)
 app.debug = DEBUG
 app.secret_key = SECRET_KEY
+app.testing = True
 """
 The OAuth object is a registry for remote applications. It helps to provide for OAuth
 """
@@ -78,13 +79,8 @@ to put a 404 error or something of that sort.
 @app.route('/login/authorized')
 @facebook.authorized_handler
 def facebook_authorized(resp):
-    print 'hello world!'
     if resp is None:
-        return 'Access denied: reason=%s error=%s' % (
-            request.args['error_reason'],
-            request.args['error_description']
-        )
-    print 'hello world!'
+        return 'User has denied request'
     session['oauth_token'] = (resp['access_token'], '')
     acc_token =  str(resp['access_token'])
     graph = GraphAPI(acc_token)
